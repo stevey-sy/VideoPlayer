@@ -1,10 +1,9 @@
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.youtubevideoplayer.Network.Service.RetrofitService
-import com.example.youtubevideoplayer.Network.Service.YoutubeItem
+import com.example.youtubevideoplayer.network.Service.RetrofitService
+import com.example.youtubevideoplayer.network.Service.YoutubeItem
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

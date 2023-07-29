@@ -1,8 +1,10 @@
-package com.example.youtubevideoplayer.Network.Service
+package com.example.youtubevideoplayer.network.Service
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.io.File
 import java.io.Serializable
@@ -50,6 +52,14 @@ class ToDo(
     val is_complete: Boolean,
     val created: String
 )
+
+fun createRetrofit(): RetrofitService {
+    val retrofit = Retrofit.Builder()
+        .baseUrl("http://mellowcode.org/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    return retrofit.create(RetrofitService::class.java)
+}
 
 interface RetrofitService {
 
