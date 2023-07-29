@@ -19,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.youtubevideoplayer.Network.Service.YoutubeItem
-import com.example.youtubevideoplayer.R
-import com.example.youtubevideoplayer.data.VideoItem
 
 @Composable
 fun ItemLayout(item: YoutubeItem) {
