@@ -17,20 +17,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.tiles.material.Text
+import coil.compose.rememberImagePainter
+import com.example.youtubevideoplayer.Network.Service.YoutubeItem
 import com.example.youtubevideoplayer.R
 import com.example.youtubevideoplayer.data.VideoItem
 
 @Composable
-fun ItemLayout(item: VideoItem) {
+fun ItemLayout(item: YoutubeItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
         // 썸네일 이미지
+        val thumbnailPainter = rememberImagePainter(data = item.thumbnail)
         Image(
-            painter = painterResource(R.drawable.ic_launcher_foreground), // 여기에 썸네일 이미지 리소스를 넣어주면 됩니다.
+            painter = thumbnailPainter,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -41,7 +43,7 @@ fun ItemLayout(item: VideoItem) {
 
         // 제목 텍스트
         Text(
-            text = item.name,
+            text = item.title,
             style = TextStyle(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
