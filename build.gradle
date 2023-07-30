@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        compose_version = "1.1.0" // 최신 버전으로 업데이트 가능
+        compose_version = "1.1.1" // 최신 버전으로 업데이트 가능
     }
     // ...
 }
