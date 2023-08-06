@@ -16,6 +16,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,29 +25,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.youtubevideoplayer.network.Service.createRetrofit
 import com.example.youtubevideoplayer.ui.theme.ItemList
 import com.example.youtubevideoplayer.ui.theme.YouTubeVideoPlayerTheme
 import com.example.youtubevideoplayer.viewModel.HomeViewModel
+import com.example.youtubevideoplayer.viewModel.HomeViewModelFactory
 import com.example.youtubevideoplayer.viewModel.MainViewModelFactory
 
 
 class MainActivity : ComponentActivity() {
-    private lateinit var viewModel: MainViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val retrofitService = createRetrofit()
-        viewModel = ViewModelProvider(this, MainViewModelFactory(retrofitService)).get(MainViewModel::class.java)
+        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(retrofitService)).get(HomeViewModel::class.java)
 
         setContent {
             YouTubeVideoPlayerTheme {
                 // 테마를 적용하여 화면 구성
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    // ViewModel에서 가져온 데이터를 사용하여 화면 구성
+                    MainScreenView(homeViewModel)
+
                 }
             }
         }
@@ -54,13 +58,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreenView() {
+fun MainScreenView(homeViewModel: HomeViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) {
         Box(Modifier.padding(it)){
-            NavigationGraph(navController = navController)
+            NavigationGraph(navController = navController, homeViewModel = homeViewModel)
         }
     }
 }
@@ -99,15 +103,24 @@ sealed class BottomNavItem(val route: String, val title: String) {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, homeViewModel: HomeViewModel) {
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
-
+        composable(BottomNavItem.Home.route) {
+            HomeScreen(homeViewModel = homeViewModel)
+        }
+        composable(BottomNavItem.Search.route) {
+            SearchScreen()
+        }
+        composable(BottomNavItem.Profile.route) {
+            ProfileScreen()
+        }
     }
 }
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
-    // ItemList(viewModel)
+fun HomeScreen(homeViewModel: HomeViewModel) {
+    val youtubeItems by homeViewModel.youtubeItems.observeAsState(emptyList())
+    ItemList(viewModel = homeViewModel)
 }
 
 @Composable
